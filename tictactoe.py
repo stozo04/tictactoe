@@ -32,26 +32,6 @@ def player(board):
     # Determine the next player
     return O if x_moves > o_moves else X
 
-
-def player(board):
-    """
-    Returns player who has the next turn on a board.
-    """
-    # Flatten the board to make counting easier
-    flattened_board = [cell for row in board for cell in row]
-
-    # Check if the board is completely empty
-    if all(cell == EMPTY for cell in flattened_board):
-        return "X"
-
-    # Count moves of X and O
-    x_moves = flattened_board.count("X")
-    o_moves = flattened_board.count("O")
-
-    # Determine the next player
-    return O if x_moves > o_moves else X
-
-
 def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
