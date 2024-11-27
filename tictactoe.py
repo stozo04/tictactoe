@@ -148,14 +148,16 @@ def maxValue(board):
 
     v = -math.inf
     best_action = None
-
-    for action in actions(board):
-        value, _ = minValue(result(board, action))  # Evaluate the result of the action
+    for action in actions(board):  # Iterate over possible actions
+        next_board = result(board, action)
+        if terminal(next_board):  # Short-circuit for terminal boards
+            return utility(next_board), action
+        value, _ = minValue(next_board)  # Evaluate further
         if value > v:
             v = value
             best_action = action
-
     return v, best_action
+
 
 
 def minValue(board):
@@ -167,11 +169,13 @@ def minValue(board):
 
     v = math.inf
     best_action = None
-
-    for action in actions(board):
-        value, _ = maxValue(result(board, action))  # Evaluate the result of the action
+    for action in actions(board):  # Iterate over possible actions
+        next_board = result(board, action)
+        if terminal(next_board):  # Short-circuit for terminal boards
+            return utility(next_board), action
+        value, _ = maxValue(next_board)  # Evaluate further
         if value < v:
             v = value
             best_action = action
-
     return v, best_action
+

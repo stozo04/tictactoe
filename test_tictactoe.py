@@ -165,10 +165,10 @@ def test_utility_non_terminal():
 
 
 def test_minimax():
-    board = [[X, EMPTY, X],
-             [O, X, EMPTY],
-             [O, O, EMPTY]]
-    assert minimax(board) == (0, 1)  # Optimal move for X
+    board = [[X, X, EMPTY],
+             [O, EMPTY, EMPTY],
+             [O, EMPTY, EMPTY]]
+    assert minimax(board) == (0, 2)  # Optimal move for X
 
 def test_result_invalid_action():
     board = initial_state()
