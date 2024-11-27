@@ -54,9 +54,10 @@ def result(board, action):
     # Unpack the action tuple
     i, j = action
 
-    # Validate the action
-    if i < 0 or i >= 3 or j < 0 or j >= 3:
+    # Validate the action before accessing the board
+    if not (0 <= i < 3 and 0 <= j < 3):  # Simplified range check
         raise ValueError("Invalid action: Out-of-bounds position.")
+    
     if board[i][j] is not EMPTY:
         raise ValueError("Invalid action: Position already taken.")
 
@@ -70,6 +71,7 @@ def result(board, action):
     new_board[i][j] = current_player
 
     return new_board
+
 
 
 def winner(board):

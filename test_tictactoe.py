@@ -1,6 +1,6 @@
 import pytest
  
-from tictactoe import EMPTY, O, X, actions, initial_state, player, terminal, utility, winner
+from tictactoe import EMPTY, O, X, actions, initial_state, minimax, player, result, terminal, utility, winner
 
 
 def test_initial_state():
@@ -134,28 +134,47 @@ def test_terminal():
     # test tie full board
     assert terminal(board) == True
 
-def test_utility():
+def test_terminal_no_winner():
+    board = [[X, O, X],
+             [O, X, EMPTY],
+             [EMPTY, EMPTY, O]]
+    assert not terminal(board)
+
+
+def test_utility_x_win():
     board = initial_state()
-    board[1][0] = X
-    board[1][1] = X
-    board[1][2] = X
-    # test X win
-    assert utility(board) == 1
+    board[1][0], board[1][1], board[1][2] = X, X, X
+    assert utility(board) == 1, "X should win"
+
+def test_utility_o_win():
     board = initial_state()
-    board[1][0] = O
-    board[1][1] = O
-    board[1][2] = O
-    # test O win
-    assert utility(board) == -1
+    board[1][0], board[1][1], board[1][2] = O, O, O
+    assert utility(board) == -1, "O should win"
+
+def test_utility_tie():
+    board = [[O, X, O],
+             [O, X, X],
+             [X, O, X]]
+    assert utility(board) == 0, "It should be a tie"
+
+def test_utility_non_terminal():
+    board = [[X, O, X],
+             [O, EMPTY, EMPTY],
+             [EMPTY, EMPTY, O]]
+    assert utility(board) == 0, "Game not over yet"
+
+
+def test_minimax():
+    board = [[X, EMPTY, X],
+             [O, X, EMPTY],
+             [O, O, EMPTY]]
+    assert minimax(board) == (0, 1)  # Optimal move for X
+
+def test_result_invalid_action():
     board = initial_state()
-    board[0][0] = O
-    board[0][1] = X
-    board[0][2] = O
-    board[1][0] = O
-    board[1][1] = X
-    board[1][2] = X
-    board[2][0] = X
-    board[2][1] = O
-    board[2][2] = X
-    # test tie full board
-    assert utility(board) == 0
+    with pytest.raises(ValueError):
+        result(board, (3, 3))  # Out of bounds
+    board[0][0] = X
+    with pytest.raises(ValueError):
+        result(board, (0, 0))  # Already occupied
+
